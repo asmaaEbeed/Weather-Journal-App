@@ -14,12 +14,23 @@ const key = '345252b34bcc67ba5923d03a6625e886';
 document.getElementById('generate').addEventListener('click', performAction);
 
 function performAction(e){
+    
     const zipCode = document.getElementById('zip').value;
     let url = `http://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${key}`
     //console.log("code is"+zipCode);
-    getZipCodeInfo(url); 
+    
+    
+                            //getZipCodeInfo(url)
+
+
+    getZipCodeInfo('/projectData')
     //getZipCodeInfo(baseURL, zipCode, apiKey) 
-}
+    //use after complete function getAnimal successfully then and start next code
+    .then(function(newData){
+        console.log(newData);
+       
+    });
+    }
 
 // const getZipCodeInfo = async (baseURL, zipCode, apiKey) =>{
     const getZipCodeInfo = async (url) =>{
@@ -31,6 +42,7 @@ function performAction(e){
         const newData = await res.json();
 
         console.log(newData);
+        return newData;
 
     }catch(error) {
 

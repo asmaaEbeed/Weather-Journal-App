@@ -1,8 +1,11 @@
 // Setup empty JS object to act as endpoint for all routes
-const projectData = {
-  temp: '40c',
-  weather: 'hot'
-};
+//projectData = {};
+
+let projectData = {};
+  // temp: '40c',
+  // weather: 'hot'
+  
+
 
 // Require Express to run server and routes
 var express =require('express');
@@ -22,7 +25,7 @@ app.use(cors());
 // Initialize the main project folder
 app.use(express.static('website'));
 
-const port = 3001;
+const port = 3002;
 /* Spin up the server*/
 const server = app.listen(port, listening);
  function listening(){
@@ -31,11 +34,29 @@ const server = app.listen(port, listening);
   };
 
 // Respond with JS object when a GET request is made to the homepage
+// app.get('url', function (req, res) {
+//   res.send(projectData);
+//   console.log(projectData);
+// });
 
-app.get('/projectData', getProjectData)
+app.get('/url', getProjectData) //correct nearly
 function getProjectData(req, res) {
-  res.send(projectData);
-  console.log(projectData);
+   res.send(projectData);
+
+  
+}
+
+app.post('/addFeel', addFeel);
+
+function addFeel(req, res){
+  console.log(req.body)
+  newEntry = {
+    weather:req.body.weather,
+    feel: req.body.feel
+  }
+  //projectData.push(newEntry);
+  res.send(projectData)
+  console.log(projectData)
 }
 
 // Setup Server

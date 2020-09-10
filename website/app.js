@@ -10,6 +10,10 @@ const key = '345252b34bcc67ba5923d03a6625e886';
 
 //const temp = GetTemp(zipcode);
 
+// Create a new date instance dynamically with JS
+let d = new Date();
+//we add 1 to getMonth because it start from 0 to 11
+let newDate = (d.getMonth()+1)+'.'+ d.getDate()+'.'+ d.getFullYear();
 
 document.getElementById('generate').addEventListener('click', performAction);
 
@@ -27,8 +31,12 @@ function performAction(e){
     //use after complete function getAnimal successfully then and start next code
     .then(function(response){
         console.log(response);
-       postData('/addFeel', {weather:response.weather, feel: feel}) ;
+       postData('/addFeel', {temp:response.main.temp, feel: feel, date: newDate}) ;
+       updateUI()
     });
+    
+      
+    
     }
 
 // const getZipCodeInfo = async (baseURL, zipCode, apiKey) =>{
@@ -67,7 +75,7 @@ function performAction(e){
 }
 
 const postData = async ( url = '', newData = {})=>{
-    console.log(newData);
+    console.log(newData);     //This return value {temp: 300, feel:"good"}
       const response = await fetch(url, {
       method: 'POST', 
       credentials: 'same-origin',
@@ -80,13 +88,24 @@ const postData = async ( url = '', newData = {})=>{
   
       try {
         const newData = await response.json();
-        console.log(newData);
+        console.log(newData);     //newData is empty 
         return newData;
       }catch(error) {
       console.log("error", error);
       }
   }
+const updateUI = async () => {
+  const request = await fetch('/all')
 
-// Create a new date instance dynamically with JS
-let d = new Date();
-let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
+  try{
+    const allData = await request.json();
+    console.log(allData);
+    document.getElementById('temp').innerHTML = allData[(allData.length-1)].temp;
+    document.getElementById('content').innerHTML = allData[(allData.length-1)].feel;
+    document.getElementById('date').innerHTML = allData[(allData.length-1)].date;
+
+
+  } catch(error){
+console.log("error", error);
+  }
+}

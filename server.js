@@ -1,10 +1,6 @@
 // Setup empty JS object to act as endpoint for all routes
-//projectData = {};
 
-let projectData = {};
-  // temp: '40c',
-  // weather: 'hot'
-  
+const projectData = {};
 
 
 // Require Express to run server and routes
@@ -25,7 +21,7 @@ app.use(cors());
 // Initialize the main project folder
 app.use(express.static('website'));
 
-const port = 3007;
+const port = 3000;
 /* Spin up the server*/
 const server = app.listen(port, listening);
  function listening(){
@@ -43,18 +39,16 @@ function getProjectData(req, res) {
 
 // Create JS object
 const weatherData = [];
-// // Respond with JS object when a GET request is made to the homepage
-
-
-
+//Add an entry to the project endpoint using a POST route
 app.post('/addFeel', addFeel);
 
 function addFeel(req, res){
-  console.log(req.body)   //طلع بيانات في terminal مثلا{temp: 302.27, feel:"ss"}
+  console.log(req.body)   //get data in terminal Like => {temp: 302.27, feel:"ss"}
   newEntry = {
     temp:req.body.temp,
     feel: req.body.feel,
-    date: req.body.date
+    date: req.body.date,
+    cityName: req.body.cityName
   }
   weatherData.push(newEntry);
   res.send(weatherData);
@@ -65,27 +59,3 @@ app.get('/all', function (req, res) {
   res.send(weatherData);
   console.log(weatherData);
 });
-// Setup Server
-
-// app.get('/all', sendData);
-
-// function sendData (request, response) {
-//   response.send(projectData);
-// };
-
-// // POST route
-// app.post('/add', callBack);
-
-// function callBack(req,res){
-//   res.send('POST received');
-// }
-
-
-// // POST an animal
-// const data = [];
-
-// app.post('/animal', addAnimal);
-
-// function addAnimal (req,res){
-//     data.push(req.body);
-// };

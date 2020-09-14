@@ -30,8 +30,8 @@ function performAction(e){
     //getZipCodeInfo(baseURL, zipCode, apiKey) 
     //use after complete function getAnimal successfully then and start next code
     .then(function(response){
-        console.log(response);
-       postData('/addFeel', {temp:response.main.temp, feel: feel, date: newDate}) ;
+        // console.log(response);
+       postData('/addFeel', {temp:response.main.temp, feel: feel, cityName:response.name, date: newDate}) ;
        updateUI()
     });
     
@@ -46,31 +46,30 @@ function performAction(e){
     try {
 
         const response = await res.json();
-        console.log(response);
-        return response;
+        //if used to check if zip code valid
+        const notFoundElement = document.getElementById('notFound');
+        const foundElement = document.getElementById('entryHolder');
+        
+        //check if zip code is empty or isn't valid
+        if(response.cod ==="400" || response.cod ==="404"){
+          notFoundElement.style.display = "block";
+          foundElement.style.display = "none";
+          notFoundElement.innerHTML ="Please, enter valid city zip code.";
+        } else{
+          notFoundElement.style.display = "none";
+          foundElement.style.display = "block";
+          // console.log(response);
+          return response;
+        }
+        
 
         }catch(error) {
 
         console.log("error", error);
 
-        alert('Please check that you zip code is a valid US zip code')
+        //alert('Please check that you zip code is a valid US zip code')
 
         }
-
-    // try {
-
-    //     const data = await res.json();
-
-    //     console.log(data);
-    //     return data;
-
-    // }catch(error) {
-
-    //   console.log("error", error);
-
-      //alert('Please check that you zip code is a valid US zip code')
-
-    //}
 
 }
 
@@ -88,21 +87,26 @@ const postData = async ( url = '', newData = {})=>{
   
       try {
         const newData = await response.json();
-        console.log(newData);     //newData is empty 
+        //console.log(newData);    
         return newData;
       }catch(error) {
       console.log("error", error);
       }
   }
+  //update UI element with new data
 const updateUI = async () => {
   const request = await fetch('/all')
 
   try{
     const allData = await request.json();
-    console.log(allData);
-    document.getElementById('temp').innerHTML = allData[(allData.length-1)].temp;
+    //console.log(allData);
+    //temp returned in kelvin, we convert it to celsius degree with this formula
+    //T(°C) = (T(°k) - 273.15)
+    const tempInCelesius = (allData[(allData.length-1)].temp -273.15);
+    document.getElementById('temp').innerHTML = tempInCelesius.toFixed(2) + "°C";
     document.getElementById('content').innerHTML = allData[(allData.length-1)].feel;
     document.getElementById('date').innerHTML = allData[(allData.length-1)].date;
+    document.getElementById('cityName').innerHTML = allData[(allData.length-1)].cityName;
 
 
   } catch(error){

@@ -4,11 +4,7 @@
  //let baseURL = 'http://api.openweathermap.org/data/2.5/forecast?id='
  //let apiKey = '345252b34bcc67ba5923d03a6625e886';
 
-const key = '345252b34bcc67ba5923d03a6625e886';
-
-//let url = `http://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${key}`;
-
-//const temp = GetTemp(zipcode);
+const key = "345252b34bcc67ba5923d03a6625e886&units=imperial";
 
 // Create a new date instance dynamically with JS
 let d = new Date();
@@ -30,7 +26,7 @@ function performAction(e){
     //getZipCodeInfo(baseURL, zipCode, apiKey) 
     //use after complete function getAnimal successfully then and start next code
     .then(function(response){
-        // console.log(response);
+         console.log(response);
        postData('/addFeel', {temp:response.main.temp, feel: feel, cityName:response.name, date: newDate}) ;
        updateUI()
     });
@@ -74,7 +70,7 @@ function performAction(e){
 }
 
 const postData = async ( url = '', newData = {})=>{
-    console.log(newData);     //This return value {temp: 300, feel:"good"}
+    //console.log(newData);     //This return value {temp: 300, feel:"good"}
       const response = await fetch(url, {
       method: 'POST', 
       credentials: 'same-origin',
@@ -100,13 +96,13 @@ const updateUI = async () => {
   try{
     const allData = await request.json();
     //console.log(allData);
-    //temp returned in kelvin, we convert it to celsius degree with this formula
-    //T(°C) = (T(°k) - 273.15)
-    const tempInCelesius = (allData[(allData.length-1)].temp -273.15);
+    //temp returned in Fehrenheit, we convert it to celsius degree with this formula
+    //T(°C) = (T(°f) - 32)/1.8
+    const tempInCelesius = (allData.temp -32)/1.8;
     document.getElementById('temp').innerHTML = tempInCelesius.toFixed(2) + "°C";
-    document.getElementById('content').innerHTML = allData[(allData.length-1)].feel;
-    document.getElementById('date').innerHTML = allData[(allData.length-1)].date;
-    document.getElementById('cityName').innerHTML = allData[(allData.length-1)].cityName;
+    document.getElementById('content').innerHTML = allData.feel;
+    document.getElementById('date').innerHTML = allData.date;
+    document.getElementById('cityName').innerHTML = allData.cityName;
 
 
   } catch(error){

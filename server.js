@@ -1,6 +1,6 @@
 // Setup empty JS object to act as endpoint for all routes
 
-const projectData = {};
+let projectData = {};
 
 
 // Require Express to run server and routes
@@ -21,7 +21,7 @@ app.use(cors());
 // Initialize the main project folder
 app.use(express.static('website'));
 
-const port = 3000;
+const port = 3003;
 /* Spin up the server*/
 const server = app.listen(port, listening);
  function listening(){
@@ -43,19 +43,23 @@ const weatherData = [];
 app.post('/addFeel', addFeel);
 
 function addFeel(req, res){
-  console.log(req.body)   //get data in terminal Like => {temp: 302.27, feel:"ss"}
+  //console.log(req.body)   //get data in terminal Like => {temp: 302.27, feel:"ss"}
   newEntry = {
     temp:req.body.temp,
     feel: req.body.feel,
     date: req.body.date,
     cityName: req.body.cityName
   }
-  weatherData.push(newEntry);
-  res.send(weatherData);
-  console.log(weatherData);
+  projectData = newEntry;
+  //weatherData.push(newEntry);
+  //res.send(weatherData);
+  res.send(projectData);
+  console.log(projectData);
 
 }
 app.get('/all', function (req, res) {
-  res.send(weatherData);
-  console.log(weatherData);
+  // res.send(weatherData);
+  // console.log(weatherData);
+    res.send(projectData);
+  console.log(projectData);
 });
